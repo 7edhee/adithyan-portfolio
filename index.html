@@ -207,6 +207,16 @@
             backface-visibility: hidden;
             transition: all 0.3s ease;
             cursor: pointer;
+            text-decoration: none !important;
+        }
+
+        .carousel-card,
+        .carousel-card:hover,
+        .carousel-card:focus,
+        .carousel-card:active,
+        .carousel-card .icon-3d,
+        .carousel-card .icon-label {
+            text-decoration: none !important;
         }
 
         .carousel-card::before {
@@ -232,27 +242,48 @@
         }
 
         .carousel-card .icon-3d {
-            font-size: 2.5rem;
-            transform: translateZ(20px);
+            font-size: 2.2rem;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
         .carousel-card .icon-label {
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-size: 0.68rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transform: translateZ(15px);
-            opacity: 0.9;
+            letter-spacing: 0.5px;
+            opacity: 0.85;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
         }
 
         .carousel-card:hover .icon-3d {
-            transform: translateZ(35px) scale(1.2);
+            transform: scale(1.15);
         }
 
         .carousel-card:hover {
-            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        /* Item facing the viewer — the current selection */
+        .carousel-item.is-active .carousel-card {
+            box-shadow: 0 0 0 2px var(--accent), 0 12px 40px rgba(0,0,0,0.6);
+        }
+
+        .carousel-item.is-active .icon-label {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .card-email.is-active .icon-label,
+        .carousel-item.is-active .card-email .icon-label {
+            color: #0a0a0a;
+        }
+
+        /* Items facing away fade out so the active one reads clearly */
+        .carousel-item:not(.is-active) .carousel-card {
+            opacity: 0.55;
         }
 
         /* Individual social media card styles */
@@ -752,10 +783,10 @@
 
         <div class="carousel-controls">
             <button class="carousel-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
-            <span style="color: var(--muted); font-size: 0.85rem;">Drag to spin</span>
+            <span style="color: var(--muted); font-size: 0.85rem;">Drag or use the arrows</span>
             <button class="carousel-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
         </div>
-        <p class="carousel-hint">↻ Click an icon to visit</p>
+        <p class="carousel-hint">Click a side icon to bring it forward, click the front icon to visit</p>
     </section>
 
     <section class="work-section" id="work">
@@ -839,15 +870,14 @@
         const itemCount = items.length;
         const angleStep = 360 / itemCount;
         const radius = 250;
+        const SNAP_TRANSITION = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 
         let currentAngle = 0;
+        let activeIndex = 0;
         let isDragging = false;
+        let dragMoved = false;
         let startX = 0;
         let startAngle = 0;
-        let autoRotateInterval;
-        let velocity = 0;
-        let lastX = 0;
-        let lastTime = 0;
 
         function positionItems() {
             items.forEach((item, index) => {
@@ -856,135 +886,126 @@
             });
         }
 
+        // Keep each card's icon/label facing the viewer (billboard) no matter
+        // how far the wheel has spun, and mark whichever item is frontmost.
+        function updateFacing() {
+            let closestIndex = 0;
+            let closestDelta = Infinity;
+
+            items.forEach((item, index) => {
+                const itemAngle = index * angleStep;
+                let effective = (itemAngle + currentAngle) % 360;
+                if (effective > 180) effective -= 360;
+                if (effective < -180) effective += 360;
+
+                const card = item.querySelector('.carousel-card');
+                if (card) card.style.transform = `rotateY(${-effective}deg)`;
+
+                const delta = Math.abs(effective);
+                if (delta < closestDelta) {
+                    closestDelta = delta;
+                    closestIndex = index;
+                }
+            });
+
+            if (closestIndex !== activeIndex) {
+                items[activeIndex].classList.remove('is-active');
+                activeIndex = closestIndex;
+            }
+            items[activeIndex].classList.add('is-active');
+        }
+
         function updateWheel() {
             wheel.style.transform = `rotateY(${currentAngle}deg)`;
+            updateFacing();
+        }
+
+        function setCardTransition(value) {
+            items.forEach((item) => {
+                const card = item.querySelector('.carousel-card');
+                if (card) card.style.transition = value === 'none' ? 'none' : `${value}, box-shadow 0.3s ease, opacity 0.3s ease, filter 0.3s ease`;
+            });
+        }
+
+        function goToIndex(index) {
+            currentAngle = -index * angleStep;
+            wheel.style.transition = SNAP_TRANSITION;
+            setCardTransition(SNAP_TRANSITION);
+            updateWheel();
         }
 
         positionItems();
         updateWheel();
 
-        function startAutoRotate() {
-            autoRotateInterval = setInterval(() => {
-                if (!isDragging) {
-                    currentAngle += 0.3;
-                    updateWheel();
-                }
-            }, 16);
-        }
-
-        function stopAutoRotate() {
-            clearInterval(autoRotateInterval);
-        }
-
-        startAutoRotate();
-
         container.addEventListener('mousedown', (e) => {
             isDragging = true;
+            dragMoved = false;
             startX = e.clientX;
             startAngle = currentAngle;
-            lastX = e.clientX;
-            lastTime = Date.now();
-            stopAutoRotate();
             wheel.style.transition = 'none';
+            setCardTransition('none');
         });
 
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
             const deltaX = e.clientX - startX;
+            if (Math.abs(deltaX) > 4) dragMoved = true;
             currentAngle = startAngle + deltaX * 0.5;
             updateWheel();
-            const now = Date.now();
-            const dt = now - lastTime;
-            if (dt > 0) velocity = (e.clientX - lastX) / dt * 10;
-            lastX = e.clientX;
-            lastTime = now;
         });
 
         document.addEventListener('mouseup', () => {
             if (!isDragging) return;
             isDragging = false;
-            wheel.style.transition = 'transform 0.1s linear';
-            function applyMomentum() {
-                if (Math.abs(velocity) > 0.1) {
-                    currentAngle += velocity;
-                    velocity *= 0.95;
-                    updateWheel();
-                    requestAnimationFrame(applyMomentum);
-                } else {
-                    startAutoRotate();
-                }
-            }
-            applyMomentum();
+            // Manual selection: settle on whichever item is nearest to front.
+            goToIndex(activeIndex);
         });
 
         container.addEventListener('touchstart', (e) => {
             isDragging = true;
+            dragMoved = false;
             startX = e.touches[0].clientX;
             startAngle = currentAngle;
-            lastX = e.touches[0].clientX;
-            lastTime = Date.now();
-            stopAutoRotate();
             wheel.style.transition = 'none';
+            setCardTransition('none');
         });
 
         container.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
             e.preventDefault();
             const deltaX = e.touches[0].clientX - startX;
+            if (Math.abs(deltaX) > 4) dragMoved = true;
             currentAngle = startAngle + deltaX * 0.5;
             updateWheel();
-            const now = Date.now();
-            const dt = now - lastTime;
-            if (dt > 0) velocity = (e.touches[0].clientX - lastX) / dt * 10;
-            lastX = e.touches[0].clientX;
-            lastTime = now;
         });
 
         container.addEventListener('touchend', () => {
             if (!isDragging) return;
             isDragging = false;
-            wheel.style.transition = 'transform 0.1s linear';
-            function applyMomentum() {
-                if (Math.abs(velocity) > 0.1) {
-                    currentAngle += velocity;
-                    velocity *= 0.95;
-                    updateWheel();
-                    requestAnimationFrame(applyMomentum);
-                } else {
-                    startAutoRotate();
-                }
-            }
-            applyMomentum();
+            goToIndex(activeIndex);
         });
 
         prevBtn.addEventListener('click', () => {
-            stopAutoRotate();
-            currentAngle += angleStep;
-            wheel.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            updateWheel();
-            setTimeout(() => {
-                wheel.style.transition = 'transform 0.1s linear';
-                startAutoRotate();
-            }, 600);
+            goToIndex((activeIndex - 1 + itemCount) % itemCount);
         });
 
         nextBtn.addEventListener('click', () => {
-            stopAutoRotate();
-            currentAngle -= angleStep;
-            wheel.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            updateWheel();
-            setTimeout(() => {
-                wheel.style.transition = 'transform 0.1s linear';
-                startAutoRotate();
-            }, 600);
+            goToIndex((activeIndex + 1) % itemCount);
         });
 
-        container.addEventListener('mouseenter', () => {
-            if (!isDragging) stopAutoRotate();
-        });
-
-        container.addEventListener('mouseleave', () => {
-            if (!isDragging) startAutoRotate();
+        // Click a side icon to bring it front and center instead of following its link.
+        items.forEach((item, index) => {
+            const link = item.querySelector('.carousel-card');
+            link.addEventListener('click', (e) => {
+                if (dragMoved) {
+                    e.preventDefault();
+                    return;
+                }
+                if (index !== activeIndex) {
+                    e.preventDefault();
+                    goToIndex(index);
+                }
+            });
         });
 
         // ========== 3D ASSETS FOR WORK CARDS ==========
@@ -1260,3 +1281,4 @@
     </script>
 </body>
 </html>
+

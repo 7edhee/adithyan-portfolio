@@ -1,587 +1,1262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#11120f">
-  <meta name="description" content="An independent designer and developer’s portfolio.">
-  <title>Adithyan 7e— Independent by Design</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adithyan 7e— Independent by Design</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-:root {
-      --bg: #11120f;
-      --panel: #1b1d17;
-      --ink: #eeeee5;
-      --muted: #a3a69a;
-      --accent: #d0ff71;
-      --line: #ffffff24;
-    }
+        :root {
+            --bg: #0a0a0a;
+            --text: #f5f5f5;
+            --accent: #c8ff00;
+            --muted: #666;
+            --card-bg: #141414;
+        }
 
-* { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: "DM Sans", sans-serif;
-    }
-    ::selection { background: var(--accent); color: var(--bg); }
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; }
-    button, a { -webkit-tap-highlight-color: transparent; }
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
-    .shell { width: min(1440px, 90%); margin: auto; }
-    .mono {
-      font: 11px/1.6 ui-monospace, monospace;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-.skip {
-      position: fixed; top: -100px; left: 20px; z-index: 20;
-      padding: 14px; color: #111; background: var(--accent);
-    }
-    .skip:focus { top: 15px; }
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.8);
+        }
 
-header {
-      height: 96px; display: flex; align-items: center;
-      justify-content: space-between; border-bottom: 1px solid var(--line);
-    }
-    .logo { font: 700 20px "Space Grotesk", sans-serif; letter-spacing: -.07em; }
-    .logo span { color: var(--accent); }
-    nav { display: flex; gap: 30px; font-size: 13px; }
-    nav a { transition: color .2s; }
-    nav a:hover { color: var(--accent); }
-    .status { display: flex; align-items: center; gap: 9px; }
-    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
 
-.hero {
-      min-height: 740px; height: min(850px, calc(100svh - 96px));
-      position: relative; display: flex; flex-direction: column;
-      justify-content: center; isolation: isolate;
-    }
-    .hero::before {
-      content: ""; position: absolute; inset: 0; z-index: -2;
-      background-image: linear-gradient(var(--line) 1px, transparent 1px),
-        linear-gradient(90deg, var(--line) 1px, transparent 1px);
-      background-size: 90px 90px; opacity: .16;
-      mask-image: radial-gradient(ellipse at 70% 45%, black, transparent 70%);
-    }
-    .eyebrow { color: var(--accent); margin-bottom: 25px; }
-    h1, h2, h3, p { margin: 0; }
-    h1 {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: clamp(66px, 8.5vw, 132px);
-      line-height: .94; letter-spacing: -.075em;
-      max-width: 850px; pointer-events: none;
-    }
-    h1 .outline { color: transparent; -webkit-text-stroke: 1px var(--ink); }
-    h1 .offset { display: block; padding-left: 7vw; }
-    .hero-copy {
-      width: 320px; max-width: 90%; margin-top: 32px;
-      color: var(--muted); font-size: 15px; line-height: 1.8;
-    }
-    .cta {
-      display: inline-flex; gap: 36px; align-items: center; width: fit-content;
-      background: var(--accent); color: #161a0e;
-      padding: 17px 23px; border-radius: 4px; font-size: 13px;
-      margin-top: 28px; transition: transform .25s;
-    }
-    .cta:hover { transform: translateY(-4px); }
-    .hero-bottom {
-      position: absolute; bottom: 28px; width: 100%;
-      display: flex; justify-content: space-between; color: var(--muted);
-    }
+        .logo span {
+            color: var(--accent);
+        }
 
-#stage {
-      position: absolute; z-index: -1; right: -4%; top: 3%;
-      width: 65%; height: 87%; overflow: hidden;
-    }
-    #stage canvas { display: block; width: 100%; height: 100%; }
-    .fallback-orb {
-      position: absolute; width: 65%; aspect-ratio: 1;
-      top: 16%; left: 20%; border-radius: 50%;
-      background: radial-gradient(circle at 30% 25%, #f3ffd3, #9cce55 25%, #35401c 58%, #10110d 73%);
-      box-shadow: inset -25px -20px 60px #0009, 0 0 110px #b6f16c12;
-    }
-    .object-tag {
-      position: absolute; right: 3%; bottom: 100px; color: var(--muted);
-      border-left: 1px solid var(--accent); padding-left: 14px;
-    }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
 
-.ticker {
-      overflow: hidden; border-block: 1px solid var(--line);
-      padding: 20px 0; color: var(--muted);
-    }
-    .ticker-inner {
-      display: flex; justify-content: space-around; gap: 25px;
-      width: min(1440px, 90%); margin: auto;
-    }
-    .ticker b { color: var(--accent); font-weight: normal; }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
 
-section.content { padding: 100px 0; }
-    .section-head {
-      display: flex; justify-content: space-between;
-      align-items: end; margin-bottom: 36px; gap: 20px;
-    }
-    .section-head h2, .about h2 {
-      font: 500 clamp(38px, 5vw, 70px)/1.05 "Space Grotesk", sans-serif;
-      letter-spacing: -.055em;
-    }
-    .section-head .mono { color: var(--muted); }
+        .nav-links a:hover {
+            color: var(--accent);
+        }
 
-.projects { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-    .project {
-      color: inherit; text-align: left; border: 0; padding: 0;
-      background: transparent; cursor: pointer; min-width: 0;
-    }
-    .art {
-      height: 365px; position: relative; overflow: hidden;
-      border-radius: 7px; display: grid; place-items: center;
-      transition: border-radius .4s;
-    }
-    .project:hover .art { border-radius: 38px 7px 38px 7px; }
-    .art-one { background: #d5ddc9; color: #19271b; }
-    .art-one::before {
-      content: ""; position: absolute; width: 280px; height: 280px;
-      border: 40px solid #233629; border-radius: 50%;
-      transform: rotate(-30deg) scaleX(.63);
-      box-shadow: 24px 18px 0 #8c9d80;
-      transition: transform .6s;
-    }
-    .project:hover .art-one::before { transform: rotate(30deg) scaleX(.72); }
-    .art-word {
-      position: relative; font: 700 clamp(52px, 7vw, 100px) "Space Grotesk", sans-serif;
-      letter-spacing: -.08em; mix-blend-mode: difference; color: white;
-    }
-    .art-two { background: #b6a3ea; color: #251e38; }
-    .tile {
-      position: absolute; width: 210px; height: 210px; border-radius: 35px;
-      background: linear-gradient(145deg, #e2d8ff, #8064c0);
-      transform: rotate(-25deg); box-shadow: 20px 25px 0 #62489466;
-      transition: transform .6s;
-    }
-    .tile::after {
-      content: ""; position: absolute; inset: 45px;
-      border: 18px solid #3b285b; border-radius: 50%;
-    }
-    .project:hover .tile { transform: rotate(15deg) translateY(-8px); }
-    .art-label { position: absolute; left: 22px; top: 20px; }
-    .art-arrow {
-      position: absolute; bottom: 20px; right: 22px; width: 42px; height: 42px;
-      display: grid; place-items: center; border: 1px solid currentColor;
-      border-radius: 50%; font-size: 22px;
-    }
-    .project-info { display: flex; justify-content: space-between; gap: 14px; padding: 20px 0; }
-    .project-info h3 { font-size: 19px; font-weight: 500; }
-    .project-info p { color: var(--muted); font-size: 12px; margin-top: 7px; }
-    .project-info > span { color: var(--muted); }
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 3rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-.about {
-      display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px;
-      border-top: 1px solid var(--line);
-    }
-    .about .eyebrow { margin-top: 10px; }
-    .about p { color: var(--muted); line-height: 1.9; max-width: 540px; margin-top: 25px; }
-    .skills { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 30px; }
-    .skills span { padding: 9px 14px; border: 1px solid var(--line); border-radius: 30px; font-size: 12px; }
+        .hero-tag {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
 
-.contact { background: var(--accent); color: #17200e; padding: 65px 0; }
-    .contact .shell { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
-    .contact h2 { font: 500 clamp(45px, 7vw, 98px)/1 "Space Grotesk", sans-serif; letter-spacing: -.065em; margin-top: 15px; }
-    .contact-link {
-      flex-shrink: 0; border: 1px solid #17200e; width: 90px; height: 90px;
-      border-radius: 50%; display: grid; place-items: center;
-      font-size: 40px; transition: background .25s, color .25s;
-    }
-    .contact-link:hover { background: #17200e; color: var(--accent); }
-    footer { display: flex; justify-content: space-between; gap: 20px; padding: 26px 0; color: var(--muted); }
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 800;
+            line-height: 0.95;
+            margin-bottom: 2rem;
+            letter-spacing: -2px;
+        }
 
-dialog {
-      color: var(--ink); background: var(--panel); border: 1px solid var(--line);
-      border-radius: 16px; width: min(560px, 90vw); padding: 36px;
-    }
-    dialog::backdrop { background: #000b; backdrop-filter: blur(9px); }
-    dialog h2 { font: 500 42px "Space Grotesk", sans-serif; letter-spacing: -.05em; margin: 20px 0; }
-    dialog p { color: var(--muted); line-height: 1.8; }
-    .close { float: right; background: none; color: inherit; border: 1px solid var(--line); border-radius: 50%; width: 36px; height: 36px; cursor: pointer; }
+        .hero h1 .highlight {
+            color: var(--accent);
+            font-style: italic;
+        }
 
-@media (min-width: 900px) { .project:nth-child(2) { margin-top: 65px; } }
-    @media (max-width: 800px) {
-      header { height: 80px; }
-      header .status { display: none; }
-      nav { gap: 20px; }
-      .hero { min-height: 780px; height: auto; justify-content: flex-start; padding-top: 65px; }
-      h1 { font-size: clamp(64px, 12vw, 96px); }
-      #stage { width: 88%; height: 460px; top: 285px; right: -5%; opacity: .8; }
-      .hero-copy { margin-top: 27px; width: 270px; }
-      .object-tag { bottom: 80px; right: 0; }
-      .hero-bottom { font-size: 9px; }
-      .ticker-inner { flex-wrap: wrap; justify-content: center; font-size: 9px; }
-      section.content { padding: 65px 0; }
-      .projects, .about { grid-template-columns: 1fr; }
-      .about { gap: 10px; }
-      .art { height: 330px; }
-      .section-head { align-items: start; }
-      .section-head > .mono { max-width: 105px; text-align: right; }
-      .contact-link { width: 64px; height: 64px; font-size: 30px; }
-      footer { font-size: 9px !important; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { transition: none !important; }
-    }
-  </style>
+        .hero p {
+            font-size: 1.2rem;
+            color: #aaa;
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: gap 0.3s;
+        }
+
+        .hero-cta:hover {
+            gap: 1rem;
+        }
+
+        /* Social Media 3D Carousel Section */
+        .social-carousel-section {
+            padding: 6rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-carousel-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(200, 255, 0, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .social-carousel-section h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .social-carousel-section .subtitle {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        .carousel-container {
+            width: 100%;
+            height: 400px;
+            perspective: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .carousel-container:active {
+            cursor: grabbing;
+        }
+
+        .carousel-wheel {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s linear;
+        }
+
+        .carousel-item {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            top: 50%;
+            left: 50%;
+            margin-top: -60px;
+            margin-left: -60px;
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .carousel-card {
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .carousel-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 50%, rgba(0,0,0,0.2) 100%);
+            pointer-events: none;
+        }
+
+        .carousel-card::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 10%;
+            right: 10%;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.4);
+            filter: blur(8px);
+            transform: translateZ(-30px);
+        }
+
+        .carousel-card .icon-3d {
+            font-size: 2.5rem;
+            transform: translateZ(20px);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-card .icon-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: translateZ(15px);
+            opacity: 0.9;
+        }
+
+        .carousel-card:hover .icon-3d {
+            transform: translateZ(35px) scale(1.2);
+        }
+
+        .carousel-card:hover {
+            transform: scale(1.1);
+        }
+
+        /* Individual social media card styles */
+        .card-github {
+            background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0 1px rgba(255,255,255,0.05);
+        }
+        .card-github .icon-3d { color: #f0f0f0; }
+
+        .card-linkedin {
+            background: linear-gradient(145deg, #0a66c2, #004182);
+            box-shadow: 0 8px 32px rgba(10, 102, 194, 0.3), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(255,255,255,0.05);
+        }
+        .card-linkedin .icon-3d { color: #fff; }
+
+        .card-twitter {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0 1px rgba(255,255,255,0.05);
+        }
+        .card-twitter .icon-3d { color: #fff; }
+
+        .card-instagram {
+            background: linear-gradient(145deg, #e1306c, #833ab4, #fd1d1d);
+            box-shadow: 0 8px 32px rgba(225, 48, 108, 0.3), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(255,255,255,0.05);
+        }
+        .card-instagram .icon-3d { color: #fff; }
+
+        .card-dribbble {
+            background: linear-gradient(145deg, #ea4c89, #c3236b);
+            box-shadow: 0 8px 32px rgba(234, 76, 137, 0.3), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(255,255,255,0.05);
+        }
+        .card-dribbble .icon-3d { color: #fff; }
+
+        .card-behance {
+            background: linear-gradient(145deg, #1769ff, #0050d4);
+            box-shadow: 0 8px 32px rgba(23, 105, 255, 0.3), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(255,255,255,0.05);
+        }
+        .card-behance .icon-3d { color: #fff; }
+
+        .card-youtube {
+            background: linear-gradient(145deg, #ff0000, #cc0000);
+            box-shadow: 0 8px 32px rgba(255, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(255,255,255,0.05);
+        }
+        .card-youtube .icon-3d { color: #fff; }
+
+        .card-email {
+            background: linear-gradient(145deg, #c8ff00, #9ecc00);
+            box-shadow: 0 8px 32px rgba(200, 255, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.3), 0 0 0 1px rgba(255,255,255,0.1);
+        }
+        .card-email .icon-3d { color: #0a0a0a; }
+        .card-email .icon-label { color: #0a0a0a; }
+
+        /* Carousel controls */
+        .carousel-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .carousel-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            color: var(--text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .carousel-btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .carousel-hint {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 1rem;
+        }
+
+        /* Reflection / floor effect */
+        .carousel-floor {
+            width: 300px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(200, 255, 0, 0.3), transparent);
+            margin: 0 auto;
+            border-radius: 50%;
+            filter: blur(1px);
+        }
+
+        /* Work Section with 3D assets */
+        .work-section {
+            padding: 6rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .work-section h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 3rem;
+            letter-spacing: -1px;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .work-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+
+        .work-card:hover {
+            border-color: rgba(200, 255, 0, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .work-card:hover::before {
+            opacity: 1;
+        }
+
+        /* 3D Canvas container */
+        .work-canvas-wrap {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            overflow: hidden;
+            border-radius: 20px 20px 0 0;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        .work-canvas-wrap canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Ambient glow behind 3D asset */
+        .canvas-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity 0.5s;
+        }
+
+        .work-card:hover .canvas-glow {
+            opacity: 0.8;
+        }
+
+        .glow-forma {
+            background: radial-gradient(circle, rgba(200, 255, 0, 0.6) 0%, transparent 70%);
+        }
+
+        .glow-offscript {
+            background: radial-gradient(circle, rgba(255, 80, 120, 0.6) 0%, transparent 70%);
+        }
+
+        /* Floating badge */
+        .work-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent);
+            z-index: 5;
+        }
+
+        .work-content {
+            padding: 2rem 2.5rem 2.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .work-card .number {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .work-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .work-card h3 .arrow {
+            color: var(--muted);
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .work-card:hover h3 .arrow {
+            color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .work-card p {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .work-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .work-card .tag {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            color: #aaa;
+            transition: all 0.3s;
+        }
+
+        .work-card:hover .tag {
+            background: rgba(200, 255, 0, 0.08);
+            color: var(--accent);
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 6rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .about-section h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 2rem;
+            letter-spacing: -1px;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            color: #aaa;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .skills-list {
+            list-style: none;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .skills-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .skills-list li::before {
+            content: '✳';
+            color: var(--accent);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 6rem 3rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-section h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .contact-section p {
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: var(--bg);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 32px rgba(200, 255, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        footer p {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .social-carousel-section {
+                padding: 4rem 1.5rem;
+            }
+
+            .carousel-container {
+                height: 350px;
+            }
+
+            .carousel-item {
+                width: 90px;
+                height: 90px;
+                margin-top: -45px;
+                margin-left: -45px;
+            }
+
+            .carousel-card .icon-3d {
+                font-size: 1.8rem;
+            }
+
+            .work-section, .about-section {
+                padding: 4rem 1.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .work-canvas-wrap {
+                height: 260px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
-
-<header class="shell">
-    <a class="logo" href="#" aria-label="Your Name home">ADITHYAN<span>®</span></a>
-    <nav aria-label="Main navigation">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact ↗</a>
+    <nav>
+        <div class="logo">ADITHYAN <span>7e</span></div>
+        <ul class="nav-links">
+            <li><a href="#work">Work</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#social">Connect</a></li>
+            <li><a href="#contact">Contact ↗</a></li>
+        </ul>
     </nav>
-    <div class="status mono"><span class="dot"></span>Independent creative</div>
-  </header>
 
-<main id="main">
-    <section class="hero shell" aria-labelledby="hero-title">
-      <div id="stage" aria-hidden="true"><div class="fallback-orb"></div></div>
-      <div class="eyebrow mono">Portfolio / Design + code + a little strange</div>
-      <h1 id="hero-title">Not made<br>to <span class="outline">blend</span><br><span class="offset">in<span style="color:var(--accent)">.</span></span></h1>
-      <p class="hero-copy">I turn curious ideas into distinct digital experiences. Thoughtfully designed. Carefully built. Impossible to ignore.</p>
-      <a class="cta" href="#work">Explore selected work <span aria-hidden="true">↗</span></a>
-      <div class="object-tag mono">Object 001 / Living alloy<br><span id="render-status">Procedural study</span></div>
-      <div class="hero-bottom mono">
-        <span>Scroll to discover ↓</span>
-        <span>Human imagination. Digital matter.</span>
-      </div>
+    <section class="hero">
+        <p class="hero-tag">Independent creative</p>
+        <h1>Portfolio /<br><span class="highlight">Design + code</span><br>+ a little strange</h1>
+        <p>I turn curious ideas into distinct digital experiences. Thoughtfully designed. Carefully built. Impossible to ignore.</p>
+        <a href="#work" class="hero-cta">Explore selected work →</a>
     </section>
 
-<div class="ticker" aria-label="Creative disciplines">
-      <div class="ticker-inner mono">
-        <span>Creative development</span><b>✳</b>
-        <span>Digital experiences</span><b>✳</b>
-        <span>Visual identity</span><b>✳</b>
-        <span>3D experiments</span>
-      </div>
-    </div>
-
-<section id="work" class="content shell" aria-labelledby="work-title">
-      <div class="section-head">
-        <h2 id="work-title">Selected experiments<span style="color:var(--accent)">↘</span></h2>
-        <span class="mono">02 concepts<br>Made to explore</span>
-      </div>
-      <div class="projects">
-        <button class="project" data-project="0" aria-haspopup="dialog" aria-label="Explore Forma concept project">
-          <div class="art art-one">
-            <span class="art-label mono">01 / Brand & digital concept</span>
-            <span class="art-word">forma.</span>
-            <span class="art-arrow" aria-hidden="true">↗</span>
-          </div>
-          <div class="project-info">
-            <div><h3>Forma — Less, but considered.</h3><p>Art direction / Web design / Development</p></div>
-            <span>01</span>
-          </div>
-        </button>
-        <button class="project" data-project="1" aria-haspopup="dialog" aria-label="Explore Offscript concept project">
-          <div class="art art-two">
-            <span class="art-label mono">02 / Interactive concept</span>
-            <div class="tile"></div>
-            <span class="art-word">offscript</span>
-            <span class="art-arrow" aria-hidden="true">↗</span>
-          </div>
-          <div class="project-info">
-            <div><h3>Offscript — Break the pattern.</h3><p>Creative direction / Interaction / 3D</p></div>
-            <span>02</span>
-          </div>
-        </button>
-      </div>
-    </section>
-
-<section id="about" class="about content shell" aria-labelledby="about-title">
-      <div class="eyebrow mono">01 / The person behind the pixels</div>
-      <div>
-        <h2 id="about-title">A designer’s eye.<br>A developer’s mind.</h2>
-        <p>I’m Your Name, an independent designer and creative developer working at the intersection of clarity and experimentation. I care about the small details that make a website feel like something, not just look like something.</p>
-        <div class="skills" aria-label="Skills">
-          <span>Visual design</span><span>Creative development</span>
-          <span>WebGL / Three.js</span><span>Interaction design</span>
+    <!-- Social Media 3D Carousel Section -->
+    <section class="social-carousel-section" id="social">
+        <h2>Let's Connect</h2>
+        <p class="subtitle">Find me across the digital universe</p>
+        
+        <div class="carousel-container" id="carouselContainer">
+            <div class="carousel-wheel" id="carouselWheel">
+                <div class="carousel-item" data-index="0">
+                    <a href="https://github.com/adithyan7e" target="_blank" class="carousel-card card-github">
+                        <i class="fab fa-github icon-3d"></i>
+                        <span class="icon-label">GitHub</span>
+                    </a>
+                </div>
+                <div class="carousel-item" data-index="1">
+                    <a href="https://linkedin.com/in/adithyan7e" target="_blank" class="carousel-card card-linkedin">
+                        <i class="fab fa-linkedin-in icon-3d"></i>
+                        <span class="icon-label">LinkedIn</span>
+                    </a>
+                </div>
+                <div class="carousel-item" data-index="2">
+                    <a href="https://twitter.com/adithyan7e" target="_blank" class="carousel-card card-twitter">
+                        <i class="fab fa-x-twitter icon-3d"></i>
+                        <span class="icon-label">X / Twitter</span>
+                    </a>
+                </div>
+                <div class="carousel-item" data-index="3">
+                    <a href="https://instagram.com/adithyan7e" target="_blank" class="carousel-card card-instagram">
+                        <i class="fab fa-instagram icon-3d"></i>
+                        <span class="icon-label">Instagram</span>
+                    </a>
+                </div>
+                <div class="carousel-item" data-index="4">
+                    <a href="https://dribbble.com/adithyan7e" target="_blank" class="carousel-card card-dribbble">
+                        <i class="fab fa-dribbble icon-3d"></i>
+                        <span class="icon-label">Dribbble</span>
+                    </a>
+                </div>
+                <div class="carousel-item" data-index="5">
+                    <a href="https://behance.net/adithyan7e" target="_blank" class="carousel-card card-behance">
+                        <i class="fab fa-behance icon-3d"></i>
+                        <span class="icon-label">Behance</span>
+                    </a>
+                </div>
+                <div class="carousel-item" data-index="6">
+                    <a href="https://youtube.com/@adithyan7e" target="_blank" class="carousel-card card-youtube">
+                        <i class="fab fa-youtube icon-3d"></i>
+                        <span class="icon-label">YouTube</span>
+                    </a>
+                </div>
+                <div class="carousel-item" data-index="7">
+                    <a href="mailto:7e.adithyan@gmail.com" class="carousel-card card-email">
+                        <i class="fas fa-envelope icon-3d"></i>
+                        <span class="icon-label">Email</span>
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <div class="carousel-floor"></div>
+
+        <div class="carousel-controls">
+            <button class="carousel-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+            <span style="color: var(--muted); font-size: 0.85rem;">Drag to spin</span>
+            <button class="carousel-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <p class="carousel-hint">↻ Click an icon to visit</p>
     </section>
 
-<section id="contact" class="contact" aria-labelledby="contact-title">
-      <div class="shell">
-        <div><span class="mono">Have something in mind?</span><h2 id="contact-title">Let’s make it real.</h2></div>
-        <!-- Replace with your email address. -->
-        <a class="contact-link" href="mailto:7e.adithyan@gmail.com" aria-label="Email Your Name">↗</a>
-      </div>
+    <section class="work-section" id="work">
+        <h2>Selected experiments ↘</h2>
+        <div class="work-grid">
+            <!-- FORMA card with 3D asset -->
+            <div class="work-card" id="formaCard">
+                <div class="work-canvas-wrap">
+                    <div class="canvas-glow glow-forma"></div>
+                    <div class="work-badge">01 / Live</div>
+                    <canvas id="formaCanvas"></canvas>
+                </div>
+                <div class="work-content">
+                    <div class="number">01 / Brand & digital concept</div>
+                    <h3>forma.<span class="arrow">↗</span></h3>
+                    <p>Forma — Less, but considered.</p>
+                    <div class="tags">
+                        <span class="tag">Art direction</span>
+                        <span class="tag">Web design</span>
+                        <span class="tag">Development</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OFFSCRIPT card with 3D asset -->
+            <div class="work-card" id="offscriptCard">
+                <div class="work-canvas-wrap">
+                    <div class="canvas-glow glow-offscript"></div>
+                    <div class="work-badge">02 / Interactive</div>
+                    <canvas id="offscriptCanvas"></canvas>
+                </div>
+                <div class="work-content">
+                    <div class="number">02 / Interactive concept</div>
+                    <h3>offscript<span class="arrow">↗</span></h3>
+                    <p>Offscript — Break the pattern.</p>
+                    <div class="tags">
+                        <span class="tag">Creative direction</span>
+                        <span class="tag">Interaction</span>
+                        <span class="tag">3D</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-  </main>
 
-<footer class="shell mono">
-    <span>© <span id="year"></span> ADITHYAN</span>
-    <span>Designed with intent. Built with curiosity.</span>
-    <a href="#">Back to top ↑</a>
-  </footer>
+    <section class="about-section" id="about">
+        <h2>The person behind the pixels</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>A designer's eye. A developer's mind.</p>
+                <p>I'm Adithyan, an independent designer and creative developer working at the intersection of clarity and experimentation. I care about the small details that make a website feel like something, not just look like something.</p>
+            </div>
+            <ul class="skills-list">
+                <li>Visual design</li>
+                <li>Creative development</li>
+                <li>WebGL / Three.js</li>
+                <li>Interaction design</li>
+            </ul>
+        </div>
+    </section>
 
-<dialog id="project-dialog" aria-labelledby="dialog-title">
-    <button class="close" aria-label="Close project">×</button>
-    <div class="mono" style="color:var(--accent)">Concept project / Preview</div>
-    <h2 id="dialog-title"></h2>
-    <p id="dialog-copy"></p>
-    <p style="margin-top:24px;font-size:12px">Sample portfolio content — replace with your project story, images, and live link.</p>
-  </dialog>
+    <section class="contact-section" id="contact">
+        <h2>Have something in mind?</h2>
+        <p>Let's make it real.</p>
+        <a href="mailto:7e.adithyan@gmail.com" class="contact-btn">Get in touch ↗</a>
+    </section>
 
-<script type="module">
-    document.getElementById("year").textContent = new Date().getFullYear();
+    <footer>
+        <p>© 2026 ADITHYAN — Designed with intent. Built with curiosity.</p>
+    </footer>
 
-const projects = [
-      {
-        title: "Forma",
-        copy: "A concept identity and digital storefront for a contemporary object studio. Quiet typography, sculptural shapes, and a restrained palette explore how a simple visual system can feel deeply expressive.",
-        color: 0xd0ff71
-      },
-      {
-        title: "Offscript",
-        copy: "An experimental creative-platform concept that trades predictable layouts for playful motion and dimensional forms. A study in balancing a bold personality with clear, approachable interactions.",
-        color: 0xb6a3ea
-      }
-    ];
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // ========== 3D CAROUSEL LOGIC ==========
+        const wheel = document.getElementById('carouselWheel');
+        const container = document.getElementById('carouselContainer');
+        const items = document.querySelectorAll('.carousel-item');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
 
-const dialog = document.getElementById("project-dialog");
-    let activeTrigger;
-    let changeColor = () => {};
+        const itemCount = items.length;
+        const angleStep = 360 / itemCount;
+        const radius = 250;
 
-document.querySelectorAll("[data-project]").forEach(button => {
-      const project = projects[Number(button.dataset.project)];
-      button.addEventListener("pointerenter", () => changeColor(project.color));
-      button.addEventListener("focus", () => changeColor(project.color));
-      button.addEventListener("click", () => {
-        activeTrigger = button;
-        document.getElementById("dialog-title").textContent = project.title;
-        document.getElementById("dialog-copy").textContent = project.copy;
-        dialog.showModal();
-      });
-    });
+        let currentAngle = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startAngle = 0;
+        let autoRotateInterval;
+        let velocity = 0;
+        let lastX = 0;
+        let lastTime = 0;
 
-dialog.querySelector(".close").addEventListener("click", () => dialog.close());
-    dialog.addEventListener("click", event => {
-      if (event.target !== dialog) return;
-      const box = dialog.getBoundingClientRect();
-      if (event.clientX < box.left || event.clientX > box.right ||
-          event.clientY < box.top || event.clientY > box.bottom) dialog.close();
-    });
-    dialog.addEventListener("close", () => activeTrigger?.focus());
-
-const stage = document.getElementById("stage");
-    const status = document.getElementById("render-status");
-
-async function buildSculpture() {
-      const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js");
-
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.7));
-      renderer.setClearColor(0x000000, 0);
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.3;
-      stage.appendChild(renderer.domElement);
-
-const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-      camera.position.set(0, 0, 8.5);
-
-scene.add(new THREE.HemisphereLight(0xf5ffe2, 0x182019, 2.2));
-
-const key = new THREE.DirectionalLight(0xe4ffb8, 5);
-      key.position.set(-3, 4, 5);
-      scene.add(key);
-
-const rim = new THREE.DirectionalLight(0xb7b0ff, 4);
-      rim.position.set(4, -1, -2);
-      scene.add(rim);
-
-const fill = new THREE.PointLight(0xffffff, 35);
-      fill.position.set(2, 1, 4);
-      scene.add(fill);
-
-const sculpture = new THREE.Group();
-      scene.add(sculpture);
-
-const material = new THREE.MeshStandardMaterial({
-        color: 0xd0ff71,
-        metalness: 0.72,
-        roughness: 0.28
-      });
-
-// Procedural asset: deform a dense sphere into a folded, organic alloy.
-      const geometry = new THREE.SphereGeometry(1.5, 112, 80);
-      const positions = geometry.attributes.position;
-      const original = positions.array.slice();
-
-function deform(time) {
-        for (let i = 0; i < positions.count; i++) {
-          const x = original[i * 3];
-          const y = original[i * 3 + 1];
-          const z = original[i * 3 + 2];
-          const wave =
-            Math.sin(x * 3.2 + time * 0.65) *
-            Math.cos(y * 2.8 - time * 0.4) *
-            Math.sin(z * 3.1 + time * 0.3);
-          const fold = Math.sin(y * 5 + x * 2 + time * 0.3);
-          const scale = 1 + wave * 0.2 + fold * 0.065;
-          positions.setXYZ(i, x * scale, y * scale, z * scale);
+        function positionItems() {
+            items.forEach((item, index) => {
+                const angle = index * angleStep;
+                item.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+            });
         }
-        positions.needsUpdate = true;
-        geometry.computeVertexNormals();
-      }
 
-sculpture.add(new THREE.Mesh(geometry, material));
-
-const ringMaterial = new THREE.MeshBasicMaterial({
-        color: 0xd5edb5, transparent: true, opacity: 0.4
-      });
-      const ringGeometry = new THREE.TorusGeometry(2.04, 0.007, 6, 180);
-      const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-      ring.rotation.set(1.1, 0.3, -0.4);
-      sculpture.add(ring);
-
-const ringTwo = new THREE.Mesh(ringGeometry, ringMaterial);
-      ringTwo.rotation.set(0.3, 1.1, 0.6);
-      ringTwo.scale.setScalar(1.1);
-      sculpture.add(ringTwo);
-
-const satellite = new THREE.Mesh(
-        new THREE.SphereGeometry(0.065, 16, 12),
-        new THREE.MeshBasicMaterial({ color: 0xe4ffad })
-      );
-      scene.add(satellite);
-
-const particleGeometry = new THREE.BufferGeometry();
-      const particles = new Float32Array(100 * 3);
-      for (let i = 0; i < particles.length; i++) particles[i] = (Math.random() - 0.5) * 10;
-      particleGeometry.setAttribute("position", new THREE.BufferAttribute(particles, 3));
-      scene.add(new THREE.Points(particleGeometry, new THREE.PointsMaterial({
-        color: 0xcce8a6, size: 0.018, transparent: true, opacity: 0.45
-      })));
-
-const motion = matchMedia("(prefers-reduced-motion: reduce)");
-      const pointer = { x: 0, y: 0 };
-      const targetColor = new THREE.Color(0xd0ff71);
-      let visible = true;
-      let frame = 0;
-      let last = 0;
-      let elapsed = 0;
-
-const render = () => renderer.render(scene, camera);
-
-changeColor = color => {
-        targetColor.setHex(color);
-        if (motion.matches) {
-          material.color.copy(targetColor);
-          render();
+        function updateWheel() {
+            wheel.style.transform = `rotateY(${currentAngle}deg)`;
         }
-      };
 
-const hero = document.querySelector(".hero");
-      hero.addEventListener("pointermove", event => {
-        if (motion.matches || event.pointerType === "touch") return;
-        const rect = hero.getBoundingClientRect();
-        pointer.x = ((event.clientX - rect.left) / rect.width - 0.5) * 0.8;
-        pointer.y = ((event.clientY - rect.top) / rect.height - 0.5) * 0.5;
-      });
-      hero.addEventListener("pointerleave", () => {
-        pointer.x = 0;
-        pointer.y = 0;
-      });
+        positionItems();
+        updateWheel();
 
-function resize() {
-        const { width, height } = stage.getBoundingClientRect();
-        if (!width || !height) return;
-        renderer.setSize(width, height);
-        camera.aspect = width / height;
-        camera.position.z = camera.aspect < 0.85 ? 10.5 : 8.5;
-        camera.updateProjectionMatrix();
-        render();
-      }
-      new ResizeObserver(resize).observe(stage);
-
-function animate(now) {
-        frame = 0;
-        if (!visible || document.hidden || motion.matches) return;
-        const delta = last ? Math.min((now - last) / 1000, 0.05) : 0;
-        last = now;
-        elapsed += delta;
-        const ease = 1 - Math.exp(-delta * 4);
-
-deform(elapsed);
-        sculpture.rotation.y += (elapsed * 0.12 + pointer.x - sculpture.rotation.y) * ease;
-        sculpture.rotation.x += (pointer.y - sculpture.rotation.x) * ease;
-        sculpture.rotation.z = Math.sin(elapsed * 0.25) * 0.08;
-        sculpture.position.y = Math.sin(elapsed * 0.7) * 0.09;
-        satellite.position.set(
-          Math.cos(elapsed * 0.45) * 2.3,
-          Math.sin(elapsed * 0.45) * 0.8,
-          Math.sin(elapsed * 0.45) * 1.4
-        );
-        material.color.lerp(targetColor, ease);
-        render();
-        frame = requestAnimationFrame(animate);
-      }
-
-function syncAnimation() {
-        cancelAnimationFrame(frame);
-        frame = 0;
-        last = 0;
-        if (visible && !document.hidden && !motion.matches) {
-          frame = requestAnimationFrame(animate);
-        } else {
-          render();
+        function startAutoRotate() {
+            autoRotateInterval = setInterval(() => {
+                if (!isDragging) {
+                    currentAngle += 0.3;
+                    updateWheel();
+                }
+            }, 16);
         }
-      }
 
-new IntersectionObserver(entries => {
-        visible = entries[0].isIntersecting;
-        syncAnimation();
-      }, { threshold: 0.01 }).observe(stage);
+        function stopAutoRotate() {
+            clearInterval(autoRotateInterval);
+        }
 
-document.addEventListener("visibilitychange", syncAnimation);
-      motion.addEventListener("change", syncAnimation);
+        startAutoRotate();
 
-renderer.domElement.addEventListener("webglcontextlost", event => {
-        event.preventDefault();
-        visible = false;
-        syncAnimation();
-        renderer.domElement.style.display = "none";
-        stage.querySelector(".fallback-orb").style.display = "";
-        status.textContent = "Static sculpture preview";
-      });
-      renderer.domElement.addEventListener("webglcontextrestored", () => {
-        renderer.domElement.style.display = "";
-        stage.querySelector(".fallback-orb").style.display = "none";
-        visible = true;
-        status.textContent = "WebGL / Move your pointer";
-        syncAnimation();
-      });
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startAngle = currentAngle;
+            lastX = e.clientX;
+            lastTime = Date.now();
+            stopAutoRotate();
+            wheel.style.transition = 'none';
+        });
 
-deform(0);
-      resize();
-      stage.querySelector(".fallback-orb").style.display = "none";
-      status.textContent = motion.matches ? "WebGL / Still study" : "WebGL / Move your pointer";
-      syncAnimation();
-    }
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const deltaX = e.clientX - startX;
+            currentAngle = startAngle + deltaX * 0.5;
+            updateWheel();
+            const now = Date.now();
+            const dt = now - lastTime;
+            if (dt > 0) velocity = (e.clientX - lastX) / dt * 10;
+            lastX = e.clientX;
+            lastTime = now;
+        });
 
-buildSculpture().catch(error => {
-      stage.querySelector("canvas")?.remove();
-      stage.querySelector(".fallback-orb").style.display = "";
-      status.textContent = "Static sculpture preview";
-      console.warn("WebGL preview unavailable:", error);
-    });
-  </script>
+        document.addEventListener('mouseup', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            wheel.style.transition = 'transform 0.1s linear';
+            function applyMomentum() {
+                if (Math.abs(velocity) > 0.1) {
+                    currentAngle += velocity;
+                    velocity *= 0.95;
+                    updateWheel();
+                    requestAnimationFrame(applyMomentum);
+                } else {
+                    startAutoRotate();
+                }
+            }
+            applyMomentum();
+        });
+
+        container.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            startAngle = currentAngle;
+            lastX = e.touches[0].clientX;
+            lastTime = Date.now();
+            stopAutoRotate();
+            wheel.style.transition = 'none';
+        });
+
+        container.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const deltaX = e.touches[0].clientX - startX;
+            currentAngle = startAngle + deltaX * 0.5;
+            updateWheel();
+            const now = Date.now();
+            const dt = now - lastTime;
+            if (dt > 0) velocity = (e.touches[0].clientX - lastX) / dt * 10;
+            lastX = e.touches[0].clientX;
+            lastTime = now;
+        });
+
+        container.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            wheel.style.transition = 'transform 0.1s linear';
+            function applyMomentum() {
+                if (Math.abs(velocity) > 0.1) {
+                    currentAngle += velocity;
+                    velocity *= 0.95;
+                    updateWheel();
+                    requestAnimationFrame(applyMomentum);
+                } else {
+                    startAutoRotate();
+                }
+            }
+            applyMomentum();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            stopAutoRotate();
+            currentAngle += angleStep;
+            wheel.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            updateWheel();
+            setTimeout(() => {
+                wheel.style.transition = 'transform 0.1s linear';
+                startAutoRotate();
+            }, 600);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            stopAutoRotate();
+            currentAngle -= angleStep;
+            wheel.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            updateWheel();
+            setTimeout(() => {
+                wheel.style.transition = 'transform 0.1s linear';
+                startAutoRotate();
+            }, 600);
+        });
+
+        container.addEventListener('mouseenter', () => {
+            if (!isDragging) stopAutoRotate();
+        });
+
+        container.addEventListener('mouseleave', () => {
+            if (!isDragging) startAutoRotate();
+        });
+
+        // ========== 3D ASSETS FOR WORK CARDS ==========
+
+        // Helper: setup renderer for a canvas
+        function setupRenderer(canvas) {
+            const renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x000000, 0);
+            return renderer;
+        }
+
+        // ---------- FORMA: Clean, minimal torus knot with smooth motion ----------
+        (function initForma() {
+            const canvas = document.getElementById('formaCanvas');
+            const wrap = canvas.parentElement;
+            const renderer = setupRenderer(canvas);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+            camera.position.z = 5;
+
+            function resize() {
+                const w = wrap.clientWidth;
+                const h = wrap.clientHeight;
+                renderer.setSize(w, h);
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Lights
+            const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambient);
+
+            const keyLight = new THREE.DirectionalLight(0xc8ff00, 1.2);
+            keyLight.position.set(3, 3, 4);
+            scene.add(keyLight);
+
+            const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            rimLight.position.set(-3, -2, -2);
+            scene.add(rimLight);
+
+            const fillLight = new THREE.PointLight(0x88ffaa, 0.6, 10);
+            fillLight.position.set(-2, 2, 2);
+            scene.add(fillLight);
+
+            // Main torus knot — elegant, minimal
+            const geometry = new THREE.TorusKnotGeometry(1, 0.32, 200, 32, 2, 3);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xc8ff00,
+                metalness: 0.7,
+                roughness: 0.25,
+                emissive: 0x223300,
+                emissiveIntensity: 0.3
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            // Orbiting small spheres
+            const orbiters = [];
+            for (let i = 0; i < 3; i++) {
+                const orb = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.08, 16, 16),
+                    new THREE.MeshStandardMaterial({
+                        color: 0xffffff,
+                        emissive: 0xc8ff00,
+                        emissiveIntensity: 1,
+                        metalness: 0.5,
+                        roughness: 0.2
+                    })
+                );
+                scene.add(orb);
+                orbiters.push({ mesh: orb, offset: (i / 3) * Math.PI * 2, radius: 1.8 });
+            }
+
+            // Mouse parallax
+            let mouseX = 0, mouseY = 0;
+            wrap.addEventListener('mousemove', (e) => {
+                const rect = wrap.getBoundingClientRect();
+                mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+                mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+            });
+
+            wrap.addEventListener('mouseleave', () => {
+                mouseX = 0; mouseY = 0;
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const t = performance.now() * 0.001;
+
+                // Smooth rotation
+                mesh.rotation.x = t * 0.3 + mouseY * 0.3;
+                mesh.rotation.y = t * 0.5 + mouseX * 0.3;
+
+                // Floating motion
+                mesh.position.y = Math.sin(t * 1.2) * 0.1;
+
+                // Orbiters
+                orbiters.forEach((o, i) => {
+                    const angle = t * 0.8 + o.offset;
+                    o.mesh.position.x = Math.cos(angle) * o.radius;
+                    o.mesh.position.z = Math.sin(angle) * o.radius;
+                    o.mesh.position.y = Math.sin(angle * 2) * 0.4;
+                });
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        })();
+
+        // ---------- OFFSCRIPT: Distorted icosahedron with noise + chaotic motion ----------
+        (function initOffscript() {
+            const canvas = document.getElementById('offscriptCanvas');
+            const wrap = canvas.parentElement;
+            const renderer = setupRenderer(canvas);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+            camera.position.z = 4.5;
+
+            function resize() {
+                const w = wrap.clientWidth;
+                const h = wrap.clientHeight;
+                renderer.setSize(w, h);
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Lights — warmer, more dramatic
+            const ambient = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambient);
+
+            const keyLight = new THREE.PointLight(0xff5078, 2, 15);
+            keyLight.position.set(2, 2, 3);
+            scene.add(keyLight);
+
+            const rimLight = new THREE.PointLight(0x5078ff, 1.5, 15);
+            rimLight.position.set(-3, -1, 2);
+            scene.add(rimLight);
+
+            const topLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            topLight.position.set(0, 4, 0);
+            scene.add(topLight);
+
+            // Distorted icosahedron with vertex noise
+            const geometry = new THREE.IcosahedronGeometry(1.2, 4);
+            const originalPositions = geometry.attributes.position.array.slice();
+
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xff5078,
+                metalness: 0.6,
+                roughness: 0.3,
+                emissive: 0x330011,
+                emissiveIntensity: 0.4,
+                wireframe: false,
+                flatShading: true
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            // Wireframe overlay for that "broken pattern" feel
+            const wireMat = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15
+            });
+            const wireMesh = new THREE.Mesh(geometry.clone(), wireMat);
+            wireMesh.scale.set(1.02, 1.02, 1.02);
+            scene.add(wireMesh);
+
+            // Floating particles around
+            const particleCount = 60;
+            const particleGeo = new THREE.BufferGeometry();
+            const particlePositions = new Float32Array(particleCount * 3);
+            for (let i = 0; i < particleCount; i++) {
+                const r = 2 + Math.random() * 1.5;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                particlePositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                particlePositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                particlePositions[i * 3 + 2] = r * Math.cos(phi);
+            }
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+            const particleMat = new THREE.PointsMaterial({
+                color: 0xff5078,
+                size: 0.04,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+            const particles = new THREE.Points(particleGeo, particleMat);
+            scene.add(particles);
+
+            // Simple noise function
+            function noise(x, y, z) {
+                return Math.sin(x * 2.1 + y * 1.3) * Math.cos(z * 1.7 + x * 0.9)
+                     + Math.sin(y * 2.3 + z * 1.1) * 0.5;
+            }
+
+            // Mouse interaction
+            let mouseX = 0, mouseY = 0;
+            wrap.addEventListener('mousemove', (e) => {
+                const rect = wrap.getBoundingClientRect();
+                mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+                mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+            });
+
+            wrap.addEventListener('mouseleave', () => {
+                mouseX = 0; mouseY = 0;
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const t = performance.now() * 0.001;
+
+                // Vertex distortion — "break the pattern"
+                const positions = geometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    const ox = originalPositions[i];
+                    const oy = originalPositions[i + 1];
+                    const oz = originalPositions[i + 2];
+                    const n = noise(ox + t * 0.8, oy + t * 0.6, oz + t * 0.4);
+                    const distortion = 1 + n * 0.15;
+                    positions[i] = ox * distortion;
+                    positions[i + 1] = oy * distortion;
+                    positions[i + 2] = oz * distortion;
+                }
+                geometry.attributes.position.needsUpdate = true;
+                geometry.computeVertexNormals();
+
+                // Sync wireframe
+                wireMesh.geometry.attributes.position.array.set(positions);
+                wireMesh.geometry.attributes.position.needsUpdate = true;
+
+                // Chaotic rotation
+                mesh.rotation.x = t * 0.4 + mouseY * 0.5;
+                mesh.rotation.y = t * 0.6 + mouseX * 0.5;
+                mesh.rotation.z = Math.sin(t * 0.7) * 0.3;
+
+                wireMesh.rotation.copy(mesh.rotation);
+
+                // Particle orbit
+                particles.rotation.y = t * 0.15;
+                particles.rotation.x = t * 0.08;
+
+                // Pulsing lights
+                keyLight.intensity = 1.5 + Math.sin(t * 2) * 0.5;
+                rimLight.intensity = 1.2 + Math.cos(t * 1.7) * 0.4;
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        })();
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,191 +1,587 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adithyan — Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11120f">
+  <meta name="description" content="An independent designer and developer’s portfolio.">
+  <title>Your Name — Independent by Design</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+      --bg: #11120f;
+      --panel: #1b1d17;
+      --ink: #eeeee5;
+      --muted: #a3a69a;
+      --accent: #d0ff71;
+      --line: #ffffff24;
+    }
+
+* { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "DM Sans", sans-serif;
+    }
+    ::selection { background: var(--accent); color: var(--bg); }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+    .shell { width: min(1440px, 90%); margin: auto; }
+    .mono {
+      font: 11px/1.6 ui-monospace, monospace;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+.skip {
+      position: fixed; top: -100px; left: 20px; z-index: 20;
+      padding: 14px; color: #111; background: var(--accent);
+    }
+    .skip:focus { top: 15px; }
+
+header {
+      height: 96px; display: flex; align-items: center;
+      justify-content: space-between; border-bottom: 1px solid var(--line);
+    }
+    .logo { font: 700 20px "Space Grotesk", sans-serif; letter-spacing: -.07em; }
+    .logo span { color: var(--accent); }
+    nav { display: flex; gap: 30px; font-size: 13px; }
+    nav a { transition: color .2s; }
+    nav a:hover { color: var(--accent); }
+    .status { display: flex; align-items: center; gap: 9px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+
+.hero {
+      min-height: 740px; height: min(850px, calc(100svh - 96px));
+      position: relative; display: flex; flex-direction: column;
+      justify-content: center; isolation: isolate;
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0; z-index: -2;
+      background-image: linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 90px 90px; opacity: .16;
+      mask-image: radial-gradient(ellipse at 70% 45%, black, transparent 70%);
+    }
+    .eyebrow { color: var(--accent); margin-bottom: 25px; }
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(66px, 8.5vw, 132px);
+      line-height: .94; letter-spacing: -.075em;
+      max-width: 850px; pointer-events: none;
+    }
+    h1 .outline { color: transparent; -webkit-text-stroke: 1px var(--ink); }
+    h1 .offset { display: block; padding-left: 7vw; }
+    .hero-copy {
+      width: 320px; max-width: 90%; margin-top: 32px;
+      color: var(--muted); font-size: 15px; line-height: 1.8;
+    }
+    .cta {
+      display: inline-flex; gap: 36px; align-items: center; width: fit-content;
+      background: var(--accent); color: #161a0e;
+      padding: 17px 23px; border-radius: 4px; font-size: 13px;
+      margin-top: 28px; transition: transform .25s;
+    }
+    .cta:hover { transform: translateY(-4px); }
+    .hero-bottom {
+      position: absolute; bottom: 28px; width: 100%;
+      display: flex; justify-content: space-between; color: var(--muted);
+    }
+
+#stage {
+      position: absolute; z-index: -1; right: -4%; top: 3%;
+      width: 65%; height: 87%; overflow: hidden;
+    }
+    #stage canvas { display: block; width: 100%; height: 100%; }
+    .fallback-orb {
+      position: absolute; width: 65%; aspect-ratio: 1;
+      top: 16%; left: 20%; border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, #f3ffd3, #9cce55 25%, #35401c 58%, #10110d 73%);
+      box-shadow: inset -25px -20px 60px #0009, 0 0 110px #b6f16c12;
+    }
+    .object-tag {
+      position: absolute; right: 3%; bottom: 100px; color: var(--muted);
+      border-left: 1px solid var(--accent); padding-left: 14px;
+    }
+
+.ticker {
+      overflow: hidden; border-block: 1px solid var(--line);
+      padding: 20px 0; color: var(--muted);
+    }
+    .ticker-inner {
+      display: flex; justify-content: space-around; gap: 25px;
+      width: min(1440px, 90%); margin: auto;
+    }
+    .ticker b { color: var(--accent); font-weight: normal; }
+
+section.content { padding: 100px 0; }
+    .section-head {
+      display: flex; justify-content: space-between;
+      align-items: end; margin-bottom: 36px; gap: 20px;
+    }
+    .section-head h2, .about h2 {
+      font: 500 clamp(38px, 5vw, 70px)/1.05 "Space Grotesk", sans-serif;
+      letter-spacing: -.055em;
+    }
+    .section-head .mono { color: var(--muted); }
+
+.projects { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .project {
+      color: inherit; text-align: left; border: 0; padding: 0;
+      background: transparent; cursor: pointer; min-width: 0;
+    }
+    .art {
+      height: 365px; position: relative; overflow: hidden;
+      border-radius: 7px; display: grid; place-items: center;
+      transition: border-radius .4s;
+    }
+    .project:hover .art { border-radius: 38px 7px 38px 7px; }
+    .art-one { background: #d5ddc9; color: #19271b; }
+    .art-one::before {
+      content: ""; position: absolute; width: 280px; height: 280px;
+      border: 40px solid #233629; border-radius: 50%;
+      transform: rotate(-30deg) scaleX(.63);
+      box-shadow: 24px 18px 0 #8c9d80;
+      transition: transform .6s;
+    }
+    .project:hover .art-one::before { transform: rotate(30deg) scaleX(.72); }
+    .art-word {
+      position: relative; font: 700 clamp(52px, 7vw, 100px) "Space Grotesk", sans-serif;
+      letter-spacing: -.08em; mix-blend-mode: difference; color: white;
+    }
+    .art-two { background: #b6a3ea; color: #251e38; }
+    .tile {
+      position: absolute; width: 210px; height: 210px; border-radius: 35px;
+      background: linear-gradient(145deg, #e2d8ff, #8064c0);
+      transform: rotate(-25deg); box-shadow: 20px 25px 0 #62489466;
+      transition: transform .6s;
+    }
+    .tile::after {
+      content: ""; position: absolute; inset: 45px;
+      border: 18px solid #3b285b; border-radius: 50%;
+    }
+    .project:hover .tile { transform: rotate(15deg) translateY(-8px); }
+    .art-label { position: absolute; left: 22px; top: 20px; }
+    .art-arrow {
+      position: absolute; bottom: 20px; right: 22px; width: 42px; height: 42px;
+      display: grid; place-items: center; border: 1px solid currentColor;
+      border-radius: 50%; font-size: 22px;
+    }
+    .project-info { display: flex; justify-content: space-between; gap: 14px; padding: 20px 0; }
+    .project-info h3 { font-size: 19px; font-weight: 500; }
+    .project-info p { color: var(--muted); font-size: 12px; margin-top: 7px; }
+    .project-info > span { color: var(--muted); }
+
+.about {
+      display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px;
+      border-top: 1px solid var(--line);
+    }
+    .about .eyebrow { margin-top: 10px; }
+    .about p { color: var(--muted); line-height: 1.9; max-width: 540px; margin-top: 25px; }
+    .skills { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 30px; }
+    .skills span { padding: 9px 14px; border: 1px solid var(--line); border-radius: 30px; font-size: 12px; }
+
+.contact { background: var(--accent); color: #17200e; padding: 65px 0; }
+    .contact .shell { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+    .contact h2 { font: 500 clamp(45px, 7vw, 98px)/1 "Space Grotesk", sans-serif; letter-spacing: -.065em; margin-top: 15px; }
+    .contact-link {
+      flex-shrink: 0; border: 1px solid #17200e; width: 90px; height: 90px;
+      border-radius: 50%; display: grid; place-items: center;
+      font-size: 40px; transition: background .25s, color .25s;
+    }
+    .contact-link:hover { background: #17200e; color: var(--accent); }
+    footer { display: flex; justify-content: space-between; gap: 20px; padding: 26px 0; color: var(--muted); }
+
+dialog {
+      color: var(--ink); background: var(--panel); border: 1px solid var(--line);
+      border-radius: 16px; width: min(560px, 90vw); padding: 36px;
+    }
+    dialog::backdrop { background: #000b; backdrop-filter: blur(9px); }
+    dialog h2 { font: 500 42px "Space Grotesk", sans-serif; letter-spacing: -.05em; margin: 20px 0; }
+    dialog p { color: var(--muted); line-height: 1.8; }
+    .close { float: right; background: none; color: inherit; border: 1px solid var(--line); border-radius: 50%; width: 36px; height: 36px; cursor: pointer; }
+
+@media (min-width: 900px) { .project:nth-child(2) { margin-top: 65px; } }
+    @media (max-width: 800px) {
+      header { height: 80px; }
+      header .status { display: none; }
+      nav { gap: 20px; }
+      .hero { min-height: 780px; height: auto; justify-content: flex-start; padding-top: 65px; }
+      h1 { font-size: clamp(64px, 12vw, 96px); }
+      #stage { width: 88%; height: 460px; top: 285px; right: -5%; opacity: .8; }
+      .hero-copy { margin-top: 27px; width: 270px; }
+      .object-tag { bottom: 80px; right: 0; }
+      .hero-bottom { font-size: 9px; }
+      .ticker-inner { flex-wrap: wrap; justify-content: center; font-size: 9px; }
+      section.content { padding: 65px 0; }
+      .projects, .about { grid-template-columns: 1fr; }
+      .about { gap: 10px; }
+      .art { height: 330px; }
+      .section-head { align-items: start; }
+      .section-head > .mono { max-width: 105px; text-align: right; }
+      .contact-link { width: 64px; height: 64px; font-size: 30px; }
+      footer { font-size: 9px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
 </head>
 <body>
+  <a class="skip" href="#main">Skip to content</a>
 
-<nav id="nav">
-  <div class="mark">A.</div>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+<header class="shell">
+    <a class="logo" href="#" aria-label="Your Name home">YOUR NAME<span>®</span></a>
+    <nav aria-label="Main navigation">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact ↗</a>
+    </nav>
+    <div class="status mono"><span class="dot"></span>Independent creative</div>
+  </header>
 
-<section class="hero">
-  <canvas id="gradientCanvas" class="hero-canvas" aria-hidden="true"></canvas>
-  <div class="terminal" id="terminal" aria-live="polite"></div>
-  <div class="scroll-cue" id="scrollCue">scroll to continue <span class="bounce-arrow">↓</span> (or keep reading, no pressure)</div>
-  <div class="eye-buddy" id="eyeBuddy" aria-hidden="true">
-    <div class="eye"><div class="iris"><div class="pupil"></div><div class="glint"></div></div></div>
-    <div class="eye"><div class="iris"><div class="pupil"></div><div class="glint"></div></div></div>
-  </div>
-</section>
+<main id="main">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div id="stage" aria-hidden="true"><div class="fallback-orb"></div></div>
+      <div class="eyebrow mono">Portfolio / Design + code + a little strange</div>
+      <h1 id="hero-title">Not made<br>to <span class="outline">blend</span><br><span class="offset">in<span style="color:var(--accent)">.</span></span></h1>
+      <p class="hero-copy">I turn curious ideas into distinct digital experiences. Thoughtfully designed. Carefully built. Impossible to ignore.</p>
+      <a class="cta" href="#work">Explore selected work <span aria-hidden="true">↗</span></a>
+      <div class="object-tag mono">Object 001 / Living alloy<br><span id="render-status">Procedural study</span></div>
+      <div class="hero-bottom mono">
+        <span>Scroll to discover ↓</span>
+        <span>Human imagination. Digital matter.</span>
+      </div>
+    </section>
 
-<section id="about">
-  <div class="section-inner about-grid">
-    <div class="reveal">
-      <h2>About</h2>
-      <p>I'm a BCA student who likes figuring out how software is put together — from database schemas to the interface someone actually taps on. Most of what's below came out of coursework and side projects where I wanted to build the real thing, not just read about it.</p>
-      <p>Still early in the journey, still shipping things.</p>
-    </div>
-    <ul class="facts reveal">
-      <li><span>Program</span><span>BCA</span></li>
-      <li><span>Focus</span><span>Web &amp; App Dev</span></li>
-      <li><span>Currently learning</span><span>DSA, SQL</span></li>
-      <li><span>Open to</span><span>Internships</span></li>
-    </ul>
-  </div>
-</section>
-
-<section id="skills">
-  <div class="section-inner">
-    <h2>Skills</h2>
-    <p class="section-note">Tap a skill to see which projects use it.</p>
-
-    <div class="skill-group reveal">
-      <h3>Languages</h3>
-      <div class="chips" data-group="lang">
-        <button class="chip" data-skill="Python">Python</button>
-        <button class="chip" data-skill="Java">Java</button>
-        <button class="chip" data-skill="C">C</button>
-        <button class="chip" data-skill="JavaScript">JavaScript</button>
+<div class="ticker" aria-label="Creative disciplines">
+      <div class="ticker-inner mono">
+        <span>Creative development</span><b>✳</b>
+        <span>Digital experiences</span><b>✳</b>
+        <span>Visual identity</span><b>✳</b>
+        <span>3D experiments</span>
       </div>
     </div>
 
-    <div class="skill-group reveal">
-      <h3>Web</h3>
-      <div class="chips" data-group="web">
-        <button class="chip" data-skill="HTML">HTML</button>
-        <button class="chip" data-skill="CSS">CSS</button>
-        <button class="chip" data-skill="PHP">PHP</button>
+<section id="work" class="content shell" aria-labelledby="work-title">
+      <div class="section-head">
+        <h2 id="work-title">Selected experiments<span style="color:var(--accent)">↘</span></h2>
+        <span class="mono">02 concepts<br>Made to explore</span>
       </div>
-    </div>
-
-    <div class="skill-group reveal">
-      <h3>Database</h3>
-      <div class="chips" data-group="db">
-        <button class="chip" data-skill="MySQL">MySQL</button>
-        <button class="chip" data-skill="SQL">SQL</button>
-      </div>
-    </div>
-
-    <div class="skill-group reveal">
-      <h3>Tools &amp; Concepts</h3>
-      <div class="chips" data-group="tools">
-        <button class="chip" data-skill="Git">Git</button>
-        <button class="chip" data-skill="OOP">OOP</button>
-      </div>
-    </div>
-
-    <div class="filter-hint" id="filterHint"></div>
-  </div>
-</section>
-
-<section id="projects">
-  <div class="section-inner">
-    <h2>Projects</h2>
-    <p class="section-note">A few things I've built. Tap a card for more detail.</p>
-    <div class="card-grid" id="cardGrid">
-
-      <div class="card reveal" tabindex="0" data-skills="Python,MySQL,OOP">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <h3>Library Management System</h3>
-            <p>Desktop app for issuing and returning books, with automatic fine calculation for overdue returns.</p>
-            <div class="stack"><span>Python</span><span>MySQL</span><span>Tkinter</span></div>
-            <p class="flip-cue">Tap to flip</p>
+      <div class="projects">
+        <button class="project" data-project="0" aria-haspopup="dialog" aria-label="Explore Forma concept project">
+          <div class="art art-one">
+            <span class="art-label mono">01 / Brand & digital concept</span>
+            <span class="art-word">forma.</span>
+            <span class="art-arrow" aria-hidden="true">↗</span>
           </div>
-          <div class="card-face card-back">
-            <h3>Library Management System</h3>
-            <p>Built as a semester project. Handles member records, book inventory, and a simple fine-per-day rule on late returns.</p>
-            <p class="flip-cue">Tap to flip back</p>
+          <div class="project-info">
+            <div><h3>Forma — Less, but considered.</h3><p>Art direction / Web design / Development</p></div>
+            <span>01</span>
           </div>
+        </button>
+        <button class="project" data-project="1" aria-haspopup="dialog" aria-label="Explore Offscript concept project">
+          <div class="art art-two">
+            <span class="art-label mono">02 / Interactive concept</span>
+            <div class="tile"></div>
+            <span class="art-word">offscript</span>
+            <span class="art-arrow" aria-hidden="true">↗</span>
+          </div>
+          <div class="project-info">
+            <div><h3>Offscript — Break the pattern.</h3><p>Creative direction / Interaction / 3D</p></div>
+            <span>02</span>
+          </div>
+        </button>
+      </div>
+    </section>
+
+<section id="about" class="about content shell" aria-labelledby="about-title">
+      <div class="eyebrow mono">01 / The person behind the pixels</div>
+      <div>
+        <h2 id="about-title">A designer’s eye.<br>A developer’s mind.</h2>
+        <p>I’m Your Name, an independent designer and creative developer working at the intersection of clarity and experimentation. I care about the small details that make a website feel like something, not just look like something.</p>
+        <div class="skills" aria-label="Skills">
+          <span>Visual design</span><span>Creative development</span>
+          <span>WebGL / Three.js</span><span>Interaction design</span>
         </div>
       </div>
+    </section>
 
-      <div class="card reveal" tabindex="0" data-skills="PHP,MySQL,JavaScript">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <h3>Campus Connect</h3>
-            <p>A student portal concept for browsing campus events and notices, with registration for events.</p>
-            <div class="stack"><span>PHP</span><span>MySQL</span><span>JavaScript</span></div>
-            <p class="flip-cue">Tap to flip</p>
-          </div>
-          <div class="card-face card-back">
-            <h3>Campus Connect</h3>
-            <p>Login system, an admin view for posting notices, and a student view for RSVPing to events.</p>
-            <p class="flip-cue">Tap to flip back</p>
-          </div>
-        </div>
+<section id="contact" class="contact" aria-labelledby="contact-title">
+      <div class="shell">
+        <div><span class="mono">Have something in mind?</span><h2 id="contact-title">Let’s make it real.</h2></div>
+        <!-- Replace with your email address. -->
+        <a class="contact-link" href="mailto:hello@example.com" aria-label="Email Your Name">↗</a>
       </div>
+    </section>
+  </main>
 
-      <div class="card reveal" tabindex="0" data-skills="HTML,CSS,JavaScript">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <h3>Weather Now</h3>
-            <p>A small web app that looks up current weather for any city using a public weather API.</p>
-            <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
-            <p class="flip-cue">Tap to flip</p>
-          </div>
-          <div class="card-face card-back">
-            <h3>Weather Now</h3>
-            <p>Focused on clean, responsive UI and handling API errors gracefully (bad city names, no connection).</p>
-            <p class="flip-cue">Tap to flip back</p>
-          </div>
-        </div>
-      </div>
+<footer class="shell mono">
+    <span>© <span id="year"></span> Your Name</span>
+    <span>Designed with intent. Built with curiosity.</span>
+    <a href="#">Back to top ↑</a>
+  </footer>
 
-      <div class="card reveal" tabindex="0" data-skills="Java,OOP">
-        <div class="card-inner">
-          <div class="card-face card-front">
-            <h3>Expense Tracker</h3>
-            <p>A personal finance tracker for logging income and expenses, with monthly category summaries.</p>
-            <div class="stack"><span>Java</span><span>OOP</span></div>
-            <p class="flip-cue">Tap to flip</p>
-          </div>
-          <div class="card-face card-back">
-            <h3>Expense Tracker</h3>
-            <p>Built around a clean class structure for transactions and categories — mainly a chance to practice OOP design.</p>
-            <p class="flip-cue">Tap to flip back</p>
-          </div>
-        </div>
-      </div>
+<dialog id="project-dialog" aria-labelledby="dialog-title">
+    <button class="close" aria-label="Close project">×</button>
+    <div class="mono" style="color:var(--accent)">Concept project / Preview</div>
+    <h2 id="dialog-title"></h2>
+    <p id="dialog-copy"></p>
+    <p style="margin-top:24px;font-size:12px">Sample portfolio content — replace with your project story, images, and live link.</p>
+  </dialog>
 
-    </div>
-  </div>
-</section>
+<script type="module">
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-<footer id="contact">
-  <div class="section-inner">
-    <div class="reveal">
-      <h2>Get in touch</h2>
-      <p>Happy to talk about internships, collaborations, or just software in general.</p>
-    </div>
-    <div class="contact-row reveal">
-      <button class="btn" id="copyEmail">Copy email</button>
-    </div>
-    <div class="social-wheel reveal">
-      <div class="wheel-icon" id="wheelIcon">GH</div>
-      <div class="wheel-stage" id="wheelStage" tabindex="0" role="listbox" aria-label="Social links — scroll, drag, or use arrow keys to browse, Enter to open">
-        <span class="wheel-marker" aria-hidden="true"></span>
-      </div>
-    </div>
-    <p class="wheel-hint">Scroll, drag, or use arrow keys to browse — tap or press Enter to open.</p>
-    <div class="copy-note" id="copyNote"></div>
-    <div class="foot-bottom">Adithyan — built with a bit of HTML, CSS, and curiosity.</div>
-  </div>
-</footer>
+const projects = [
+      {
+        title: "Forma",
+        copy: "A concept identity and digital storefront for a contemporary object studio. Quiet typography, sculptural shapes, and a restrained palette explore how a simple visual system can feel deeply expressive.",
+        color: 0xd0ff71
+      },
+      {
+        title: "Offscript",
+        copy: "An experimental creative-platform concept that trades predictable layouts for playful motion and dimensional forms. A study in balancing a bold personality with clear, approachable interactions.",
+        color: 0xb6a3ea
+      }
+    ];
 
-<script src="script.js"></script>
+const dialog = document.getElementById("project-dialog");
+    let activeTrigger;
+    let changeColor = () => {};
+
+document.querySelectorAll("[data-project]").forEach(button => {
+      const project = projects[Number(button.dataset.project)];
+      button.addEventListener("pointerenter", () => changeColor(project.color));
+      button.addEventListener("focus", () => changeColor(project.color));
+      button.addEventListener("click", () => {
+        activeTrigger = button;
+        document.getElementById("dialog-title").textContent = project.title;
+        document.getElementById("dialog-copy").textContent = project.copy;
+        dialog.showModal();
+      });
+    });
+
+dialog.querySelector(".close").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", event => {
+      if (event.target !== dialog) return;
+      const box = dialog.getBoundingClientRect();
+      if (event.clientX < box.left || event.clientX > box.right ||
+          event.clientY < box.top || event.clientY > box.bottom) dialog.close();
+    });
+    dialog.addEventListener("close", () => activeTrigger?.focus());
+
+const stage = document.getElementById("stage");
+    const status = document.getElementById("render-status");
+
+async function buildSculpture() {
+      const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js");
+
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.7));
+      renderer.setClearColor(0x000000, 0);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.3;
+      stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+      camera.position.set(0, 0, 8.5);
+
+scene.add(new THREE.HemisphereLight(0xf5ffe2, 0x182019, 2.2));
+
+const key = new THREE.DirectionalLight(0xe4ffb8, 5);
+      key.position.set(-3, 4, 5);
+      scene.add(key);
+
+const rim = new THREE.DirectionalLight(0xb7b0ff, 4);
+      rim.position.set(4, -1, -2);
+      scene.add(rim);
+
+const fill = new THREE.PointLight(0xffffff, 35);
+      fill.position.set(2, 1, 4);
+      scene.add(fill);
+
+const sculpture = new THREE.Group();
+      scene.add(sculpture);
+
+const material = new THREE.MeshStandardMaterial({
+        color: 0xd0ff71,
+        metalness: 0.72,
+        roughness: 0.28
+      });
+
+// Procedural asset: deform a dense sphere into a folded, organic alloy.
+      const geometry = new THREE.SphereGeometry(1.5, 112, 80);
+      const positions = geometry.attributes.position;
+      const original = positions.array.slice();
+
+function deform(time) {
+        for (let i = 0; i < positions.count; i++) {
+          const x = original[i * 3];
+          const y = original[i * 3 + 1];
+          const z = original[i * 3 + 2];
+          const wave =
+            Math.sin(x * 3.2 + time * 0.65) *
+            Math.cos(y * 2.8 - time * 0.4) *
+            Math.sin(z * 3.1 + time * 0.3);
+          const fold = Math.sin(y * 5 + x * 2 + time * 0.3);
+          const scale = 1 + wave * 0.2 + fold * 0.065;
+          positions.setXYZ(i, x * scale, y * scale, z * scale);
+        }
+        positions.needsUpdate = true;
+        geometry.computeVertexNormals();
+      }
+
+sculpture.add(new THREE.Mesh(geometry, material));
+
+const ringMaterial = new THREE.MeshBasicMaterial({
+        color: 0xd5edb5, transparent: true, opacity: 0.4
+      });
+      const ringGeometry = new THREE.TorusGeometry(2.04, 0.007, 6, 180);
+      const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+      ring.rotation.set(1.1, 0.3, -0.4);
+      sculpture.add(ring);
+
+const ringTwo = new THREE.Mesh(ringGeometry, ringMaterial);
+      ringTwo.rotation.set(0.3, 1.1, 0.6);
+      ringTwo.scale.setScalar(1.1);
+      sculpture.add(ringTwo);
+
+const satellite = new THREE.Mesh(
+        new THREE.SphereGeometry(0.065, 16, 12),
+        new THREE.MeshBasicMaterial({ color: 0xe4ffad })
+      );
+      scene.add(satellite);
+
+const particleGeometry = new THREE.BufferGeometry();
+      const particles = new Float32Array(100 * 3);
+      for (let i = 0; i < particles.length; i++) particles[i] = (Math.random() - 0.5) * 10;
+      particleGeometry.setAttribute("position", new THREE.BufferAttribute(particles, 3));
+      scene.add(new THREE.Points(particleGeometry, new THREE.PointsMaterial({
+        color: 0xcce8a6, size: 0.018, transparent: true, opacity: 0.45
+      })));
+
+const motion = matchMedia("(prefers-reduced-motion: reduce)");
+      const pointer = { x: 0, y: 0 };
+      const targetColor = new THREE.Color(0xd0ff71);
+      let visible = true;
+      let frame = 0;
+      let last = 0;
+      let elapsed = 0;
+
+const render = () => renderer.render(scene, camera);
+
+changeColor = color => {
+        targetColor.setHex(color);
+        if (motion.matches) {
+          material.color.copy(targetColor);
+          render();
+        }
+      };
+
+const hero = document.querySelector(".hero");
+      hero.addEventListener("pointermove", event => {
+        if (motion.matches || event.pointerType === "touch") return;
+        const rect = hero.getBoundingClientRect();
+        pointer.x = ((event.clientX - rect.left) / rect.width - 0.5) * 0.8;
+        pointer.y = ((event.clientY - rect.top) / rect.height - 0.5) * 0.5;
+      });
+      hero.addEventListener("pointerleave", () => {
+        pointer.x = 0;
+        pointer.y = 0;
+      });
+
+function resize() {
+        const { width, height } = stage.getBoundingClientRect();
+        if (!width || !height) return;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.position.z = camera.aspect < 0.85 ? 10.5 : 8.5;
+        camera.updateProjectionMatrix();
+        render();
+      }
+      new ResizeObserver(resize).observe(stage);
+
+function animate(now) {
+        frame = 0;
+        if (!visible || document.hidden || motion.matches) return;
+        const delta = last ? Math.min((now - last) / 1000, 0.05) : 0;
+        last = now;
+        elapsed += delta;
+        const ease = 1 - Math.exp(-delta * 4);
+
+deform(elapsed);
+        sculpture.rotation.y += (elapsed * 0.12 + pointer.x - sculpture.rotation.y) * ease;
+        sculpture.rotation.x += (pointer.y - sculpture.rotation.x) * ease;
+        sculpture.rotation.z = Math.sin(elapsed * 0.25) * 0.08;
+        sculpture.position.y = Math.sin(elapsed * 0.7) * 0.09;
+        satellite.position.set(
+          Math.cos(elapsed * 0.45) * 2.3,
+          Math.sin(elapsed * 0.45) * 0.8,
+          Math.sin(elapsed * 0.45) * 1.4
+        );
+        material.color.lerp(targetColor, ease);
+        render();
+        frame = requestAnimationFrame(animate);
+      }
+
+function syncAnimation() {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        last = 0;
+        if (visible && !document.hidden && !motion.matches) {
+          frame = requestAnimationFrame(animate);
+        } else {
+          render();
+        }
+      }
+
+new IntersectionObserver(entries => {
+        visible = entries[0].isIntersecting;
+        syncAnimation();
+      }, { threshold: 0.01 }).observe(stage);
+
+document.addEventListener("visibilitychange", syncAnimation);
+      motion.addEventListener("change", syncAnimation);
+
+renderer.domElement.addEventListener("webglcontextlost", event => {
+        event.preventDefault();
+        visible = false;
+        syncAnimation();
+        renderer.domElement.style.display = "none";
+        stage.querySelector(".fallback-orb").style.display = "";
+        status.textContent = "Static sculpture preview";
+      });
+      renderer.domElement.addEventListener("webglcontextrestored", () => {
+        renderer.domElement.style.display = "";
+        stage.querySelector(".fallback-orb").style.display = "none";
+        visible = true;
+        status.textContent = "WebGL / Move your pointer";
+        syncAnimation();
+      });
+
+deform(0);
+      resize();
+      stage.querySelector(".fallback-orb").style.display = "none";
+      status.textContent = motion.matches ? "WebGL / Still study" : "WebGL / Move your pointer";
+      syncAnimation();
+    }
+
+buildSculpture().catch(error => {
+      stage.querySelector("canvas")?.remove();
+      stage.querySelector(".fallback-orb").style.display = "";
+      status.textContent = "Static sculpture preview";
+      console.warn("WebGL preview unavailable:", error);
+    });
+  </script>
 </body>
 </html>

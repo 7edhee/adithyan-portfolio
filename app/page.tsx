@@ -35,7 +35,7 @@ export default function Home() {
         <div className="grid">
           <article className="card">
             <div className="card-tag">01 / Live • Brand & digital concept</div>
-            <h3>forma. ↗</h3>
+            <h3>forma. </h3>
             <p>Forma — Less, but considered.</p>
             <div className="card-skills">
               <span>Art direction</span><span>Web design</span><span>Development</span>
@@ -64,10 +64,10 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ✅ Removed onSelect prop */}
       <NewsletterBookshelf
         items={editions}
         brand="Studio Notes"
-        onSelect={(item) => console.log("Selected", item.id)}
       />
 
       <section id="social">

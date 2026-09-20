@@ -11,10 +11,14 @@ export type NewsletterBookshelfItem = {
 interface NewsletterBookshelfProps {
   items: NewsletterBookshelfItem[]
   brand?: string
-  onSelect?: (item: NewsletterBookshelfItem) => void
 }
 
-export function NewsletterBookshelf({ items, brand = "Studio Notes", onSelect }: NewsletterBookshelfProps) {
+export function NewsletterBookshelf({ items, brand = "Studio Notes" }: NewsletterBookshelfProps) {
+  const handleClick = (item: NewsletterBookshelfItem) => {
+    // Optional: Add analytics or tracking here
+    console.log("Selected", item.id)
+  }
+
   return (
     <section className="archive">
       <h2 className="archive-title">{brand}</h2>
@@ -25,10 +29,7 @@ export function NewsletterBookshelf({ items, brand = "Studio Notes", onSelect }:
             href={item.href}
             className="archive-item"
             style={{ background: item.color || "transparent", color: item.color ? (item.color === "#16277a" ? "#fff" : "#111") : "inherit" }}
-            onClick={(e) => {
-              e.preventDefault()
-              onSelect?.(item)
-            }}
+            onClick={() => handleClick(item)}
           >
             <div className="archive-info">
               <span className="archive-tag">EDITION {item.id.split("-")[1].toUpperCase()}</span>

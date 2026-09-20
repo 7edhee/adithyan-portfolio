@@ -1,10 +1,8 @@
-import NewsletterArchive from "@/components/NewsletterArchive"
-
 export default function Home() {
   return (
     <main className="container">
       <nav>
-        <div style={{ fontWeight: 700, fontSize: "1.1rem" }}>ADITHYAN 7e</div>
+        <div className="logo">ADITHYAN 7e</div>
         <div className="nav-links">
           <a href="#work">Work</a>
           <a href="#about">About</a>
@@ -15,46 +13,73 @@ export default function Home() {
 
       <header>
         <h1>Independent creative</h1>
-        <p>Portfolio / Design + code + a little strange</p>
-        <p style={{ marginBottom: "2rem" }}>I turn curious ideas into distinct digital experiences. Thoughtfully designed. Carefully built. Impossible to ignore.</p>
-        <a href="#work" className="cta-btn">Explore selected work →</a>
+        <div className="subtitle">Portfolio / Design + code + a little strange</div>
+        <p>I turn curious ideas into distinct digital experiences. Thoughtfully designed. Carefully built. Impossible to ignore.</p>
+        <a href="#work" className="cta">Explore selected work →</a>
       </header>
 
       <section id="work">
-        <h2>Selected experiments ↘</h2>
+        <h2 className="section-title">Selected experiments</h2>
+        <div className="interactive-note">
+          Drag or use the arrows • Click a side icon to bring it forward, click the front icon to visit
+        </div>
         <div className="grid">
           <article className="card">
-            <span className="tag">01 / Live • Brand & digital concept</span>
+            <div className="card-tag">01 / Live • Brand & digital concept</div>
             <h3>forma. ↗</h3>
             <p>Forma — Less, but considered.</p>
-            <p style={{ fontSize: "0.8rem", marginTop: "0.5rem" }}>Art direction • Web design • Development</p>
+            <div className="card-skills">
+              <span>Art direction</span><span>Web design</span><span>Development</span>
+            </div>
           </article>
           <article className="card">
-            <span className="tag">02 / Interactive • Interactive concept</span>
+            <div className="card-tag">02 / Interactive • Interactive concept</div>
             <h3>offscript ↗</h3>
             <p>Offscript — Break the pattern.</p>
-            <p style={{ fontSize: "0.8rem", marginTop: "0.5rem" }}>Creative direction • Interaction • 3D</p>
+            <div className="card-skills">
+              <span>Creative direction</span><span>Interaction</span><span>3D</span>
+            </div>
           </article>
         </div>
       </section>
 
-      <NewsletterArchive />
-
-      <section id="about" style={{ borderTop: "1px solid var(--border)", paddingTop: "3rem", marginTop: "3rem" }}>
+      <section id="about">
         <h2>The person behind the pixels</h2>
-        <p style={{ color: "var(--text-muted)", marginBottom: "1rem" }}>A designer's eye. A developer's mind.</p>
+        <p className="lead">A designer's eye. A developer's mind.</p>
         <p>I'm Adithyan, an independent designer and creative developer working at the intersection of clarity and experimentation. I care about the small details that make a website feel like something, not just look like something.</p>
-        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "1.5rem" }}>
-          {["Visual design", "Creative development", "WebGL / Three.js", "Interaction design"].map((skill) => (
-            <span key={skill} style={{ padding: "0.4rem 0.8rem", border: "1px solid var(--border)", borderRadius: "20px", fontSize: "0.85rem" }}>{skill}</span>
+        <div className="tags">
+          {["Visual design", "Creative development", "WebGL / Three.js", "Interaction design"].map((t) => (
+            <span key={t} className="tag">{t}</span>
           ))}
         </div>
       </section>
 
-      <section id="social" style={{ marginTop: "3rem" }}>
-        <h2>Let's Connect</h2>
-        <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem" }}>Find me across the digital universe</p>
-        <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))" }}>
+      {/* Newsletter Archive */}
+      <section className="archive">
+        <h2 className="section-title">Studio Notes Archive</h2>
+        <div className="archive-list">
+          {[
+            { id: "04", title: "The useful systems issue", date: "JUL 24, 2026", href: "/posts/useful-systems" },
+            { id: "03", title: "A better creative workflow", date: "JUL 17, 2026", href: "/posts/creative-workflow" },
+            { id: "02", title: "Notes on building in public", date: "JUL 10, 2026", href: "/posts/building-in-public", color: "#efe8d4", text: "#111" },
+            { id: "01", title: "The small team advantage", date: "JUL 3, 2026", href: "/posts/small-team-advantage", color: "#16277a", text: "#fff" },
+          ].map((item) => (
+            <a key={item.id} href={item.href} className="archive-item" style={{ background: item.color || "transparent", color: item.text || "inherit" }}>
+              <div className="archive-info">
+                <span className="archive-tag">EDITION {item.id}</span>
+                <span className="archive-title">{item.title}</span>
+                <span className="archive-date">{item.date}</span>
+              </div>
+              <span className="archive-arrow">→</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section id="social">
+        <h2 className="section-title">Let's Connect</h2>
+        <p style={{ color: "var(--text-muted)", marginBottom: "1rem" }}>Find me across the digital universe</p>
+        <div className="social-grid">
           {[
             ["GitHub", "https://github.com/adithyan7e"],
             ["LinkedIn", "https://linkedin.com/in/adithyan7e"],
@@ -65,15 +90,15 @@ export default function Home() {
             ["YouTube", "https://youtube.com/@7edhee"],
             ["Email", "mailto:7e.adithyan@gmail.com"]
           ].map(([name, url]) => (
-            <a key={name} href={url} className="cta-btn" style={{ textAlign: "center" }}>{name}</a>
+            <a key={name} href={url} className="social-link" target="_blank" rel="noopener noreferrer">{name}</a>
           ))}
         </div>
       </section>
 
-      <section style={{ textAlign: "center", padding: "4rem 0" }}>
+      <section className="final-cta">
         <h2>Have something in mind?</h2>
-        <p style={{ color: "var(--text-muted)", margin: "0.5rem 0 1.5rem" }}>Let's make it real.</p>
-        <a href="mailto:7e.adithyan@gmail.com" className="cta-btn">Get in touch ↗</a>
+        <p>Let's make it real.</p>
+        <a href="mailto:7e.adithyan@gmail.com" className="cta">Get in touch ↗</a>
       </section>
 
       <footer>
